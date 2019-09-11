@@ -1,3 +1,41 @@
+## Nishant's Changes
+
+This addition to the README will explain how to run the question similarity function. It uses BERT with a classification layer to predict whether or not two questions are similar. The output is a float between 0 and 1, indicating the probability that the two inputs are paraphrasing each other. Below is the original README.
+
+### Environment setup
+* **OS**: I used Ubuntu 18.04, but theoretically should work on any flavor of Linux
+* **Dependencies**: Python 3.5+, Tensorflow 1.11.0+, tensorflow-gpu (If using GPU -- highly recommended) The original code was tested with 1.11.0, but I found the newest version to work just fine as well. 
+
+Download BERT model:
+*   **[`BERT-Base, Uncased`](https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip)**:
+    12-layer, 768-hidden, 12-heads, 110M parameters
+    
+Download Finetuned Classifier:
+ *   **[`Finetuned Classifier`](https://drive.google.com/file/d/1pCojP7TnOBkZJUjERTJiTAmDc65FHwg7/view?usp=sharing)**  
+
+Expand compressed folder: \
+    `tar -xzfv trained_classifier.tar.gz`
+
+The function requires two environment variables that specify the paths to the above models:
+```
+export BERT_BASE_DIR=/path/to/bert/model
+export TRAINED_CLASSIFIER=/path/to/trained/classifier
+```
+
+After doing the above, you are ready to call the function. Here is an example:
+```python
+from nishant_run_classifier import predict
+
+if __name__ == "__main__":
+
+    first = "The monster destroyed the building"
+    second = "The building was destroyed by the monster"
+    
+    similarity_score = predict(first, second)
+    print("Probability that the questions are similar: {}".format(similarity_score))
+```
+
+
 # BERT
 
 **\*\*\*\*\* New May 31st, 2019: Whole Word Masking Models \*\*\*\*\***
