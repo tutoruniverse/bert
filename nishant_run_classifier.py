@@ -64,8 +64,8 @@ flags.DEFINE_bool(
 )
 
 flags.DEFINE_string(
-    "sentence1", None,
-    "Sentence 1"
+    "sentences", None,
+    "Sentences"
 )
 
 flags.DEFINE_string(
@@ -364,12 +364,13 @@ class RawQPInputProcessor(DataProcessor):
 
     def get_test_examples(self, data_dir):
         examples = []
-        guid1 = "test-1"
         label = "0"
-        text_a = FLAGS.sentence1
-        text_b = FLAGS.sentence2
-        examples.append(
-            InputExample(guid=guid1, text_a=text_a, text_b=text_b, label=label))
+        count = 0
+        for text_a, text_b in FLAGS.sentences:
+          guid = "test-{}".format(count)
+          examples.append(
+            InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+          count+=1
         return examples
 
     def get_labels(self):
@@ -1004,6 +1005,7 @@ def main(_):
         drop_remainder=predict_drop_remainder)
 
     result = estimator.predict(input_fn=predict_input_fn)
+    scores = []
     if FLAGS.do_predict:
         output_predict_file = os.path.join(FLAGS.output_dir, "test_results.tsv")
         with tf.gfile.GFile(output_predict_file, "w") as writer:
@@ -1024,23 +1026,24 @@ def main(_):
             probabilities = prediction['probabilities']
             if i >= num_actual_predict_examples:
                 break
-            similarity_score = probabilities[1]
+            scores.append(probabilities[1])
             num_written_lines += 1
     assert num_written_lines == num_actual_predict_examples
-    assert num_written_lines == 1
-    return similarity_score
-def predict(one, two):
+    return scores
+def predict(lst):
  # flags.mark_flag_as_required("data_dir")
  # flags.mark_flag_as_required("task_name")
  # flags.mark_flag_as_required("vocab_file")
  # flags.mark_flag_as_required("bert_config_file")
  # flags.mark_flag_as_required("output_dir")
  # tf.app.run(main=main, argv=['nishant_run_classifier', '--sentence1', one, '--sentence2', two])
- FLAGS.sentence1 = one
- FLAGS.sentence2 = two
+ FLAGS.sentences = lst
  return main(None)
 
 
 if __name__ == "__main__":
-  sim_score = predict("How are you", "I am bigfoot riding a unicorn")
-  print(sim_score)
+  arg = []
+  for i in range(30):
+    arg += [("How are you", "I am bigfoot riding a unicorn"), ("How are you?", "Are you okay?")]
+  sim_scores = predict(arg)
+  print(sim_scores)
