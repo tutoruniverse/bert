@@ -22,7 +22,7 @@ export BERT_BASE_DIR=/path/to/bert/model
 export TRAINED_CLASSIFIER=/path/to/trained/classifier
 ```
 
-After doing the above, you are ready to call the function. Here is an example:
+After doing the above, you are ready to call the function. It takes an input a list of questions pairs (2-tuples). It outputs a list of scores between 0 and 1. Here is an example:
 ```python
 from nishant_run_classifier import predict
 
@@ -30,8 +30,13 @@ if __name__ == "__main__":
 
     first = "The monster destroyed the building"
     second = "The building was destroyed by the monster"
+    pair1 = (first, second)
     
-    similarity_score = predict(first, second)
+    third = "How are you?"
+    fourth = "I am fine, thank you."
+    pair2 = (third, fourth)
+    
+    similarity_score = predict([pair1, pair2])
     print("Probability that the questions are similar: {}".format(similarity_score))
 ```
 
