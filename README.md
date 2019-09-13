@@ -38,7 +38,7 @@ if __name__ == "__main__":
     
     qqp_model = Model()
     similarity_scores = qqp_model.predict([pair1, pair2])
-    print("Probability that the questions are similar: {}".format(similarity_score))
+    print("Probability that the questions are similar: {}".format(similarity_scores))
 ```
 
 
