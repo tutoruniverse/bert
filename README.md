@@ -24,7 +24,7 @@ export TRAINED_CLASSIFIER=/path/to/trained/classifier
 
 After doing the above, you are ready to call the function. It takes an input a list of questions pairs (2-tuples). It outputs a list of scores between 0 and 1. Here is an example:
 ```python
-from nishant_run_classifier import predict
+from model import Model
 
 if __name__ == "__main__":
 
@@ -36,7 +36,8 @@ if __name__ == "__main__":
     fourth = "I am fine, thank you."
     pair2 = (third, fourth)
     
-    similarity_score = predict([pair1, pair2])
+    qqp_model = Model()
+    similarity_scores = qqp_model.predict([pair1, pair2])
     print("Probability that the questions are similar: {}".format(similarity_score))
 ```
 
